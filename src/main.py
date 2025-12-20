@@ -6,7 +6,8 @@ from src.ga.evolve import evolve
 from src.render.renderer import Renderer
 from src.fitness.combined import combined_fitness
 from src.utils.image_io import load_image
-
+import numpy as np
+import matplotlib.pyplot as plt
 
 def main():
 
@@ -23,7 +24,7 @@ def main():
     elite_size    = cfg["elitism"]
 
     # load target image
-    target = load_image("data/target/target.jpg")
+    target = load_image("data/target/target64.jpg")
 
     renderer = Renderer()
 
@@ -37,11 +38,11 @@ def main():
             renderer.render(individual)
             for individual in population
         ]
-
         # compute fitness for each rendered image
         fitness_values = [
             combined_fitness(img, target)
             for img in rendered_images
+            
         ]
 
         # evolve population for next generation
@@ -56,6 +57,12 @@ def main():
 
         # report progress (best score)
         print(f"Generation {gen}: best fitness = {min(fitness_values)}")
+
+    # after evolution loop ends
+    best_idx = fitness_values.index(min(fitness_values))
+    best_img = rendered_images[best_idx]
+    best_img.save("data/outputs/final_best.png")
+    print("Final best image saved.")
 
 
 if __name__ == "__main__":
