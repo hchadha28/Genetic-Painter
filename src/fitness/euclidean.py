@@ -1,6 +1,6 @@
 import numpy as np
 from skimage import color
-
+from src.fitness.normalize import normalize
 
 def compute_euclidean(img1, img2):
 
@@ -18,6 +18,6 @@ def compute_euclidean(img1, img2):
     # Compute Delta E for each pixel (Euclidean distance in Lab)
     diff = arr1 - arr2
     delta_e_values = np.sqrt(np.sum(diff ** 2, axis=2))
-
+    normalized_value = normalize(np.mean(delta_e_values))
     # Return mean Delta E
-    return np.mean(delta_e_values)
+    return normalized_value

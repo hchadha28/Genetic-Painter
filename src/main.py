@@ -24,7 +24,7 @@ def main():
     elite_size    = cfg["elitism"]
 
     # load target image
-    target = load_image("data/target/target64.jpg")
+    target = load_image("data/target/target64.png")
 
     renderer = Renderer()
 
@@ -57,6 +57,11 @@ def main():
 
         # report progress (best score)
         print(f"Generation {gen}: best fitness = {min(fitness_values)}")
+        if(gen%100 == 0):
+            best_idx = fitness_values.index(min(fitness_values))
+            best_img = rendered_images[best_idx]
+            best_img.save(f"data/outputs/gen{gen}_best.png")
+            print(f"Generation {gen}: best image saved.")
 
     # after evolution loop ends
     best_idx = fitness_values.index(min(fitness_values))
