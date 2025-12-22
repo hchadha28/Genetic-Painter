@@ -24,7 +24,7 @@ def main():
     elite_size    = cfg["elitism"]
 
     # load target image
-    target = load_image("data/target/target64.png")
+    target = load_image("data/target/target64.jpg")
 
     renderer = Renderer()
 
