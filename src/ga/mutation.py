@@ -45,7 +45,7 @@ def mutate(individual, mutation_rate):
 
     # --- ACTION 1: MODIFY ONE EXISTING STROKE ---
     if action == 'modify_stroke':
-        if len(individual.strokes) > 0:
+        if len(individual.strokes) > 10:
             # Pick ONE random stroke to modify (instead of looping through all)
             stroke = random.choice(individual.strokes)
             
@@ -82,6 +82,39 @@ def mutate(individual, mutation_rate):
             min(max(b + random.randint(-5, 5), 0), 255),
         )
 
+    if action == 'split_stroke':
+        if(len(individual.strokes) < 10):
+            action = 'add_stroke'
+        elif len(individual.strokes) < MAX_MUTATION_STROKES:
+            # Pick a random stroke
+            idx = random.randint(0, len(individual.strokes) - 1)
+            parent = individual.strokes[idx]
+            
+            # Only split if it's long enough
+            dx = parent.x2 - parent.x1
+            dy = parent.y2 - parent.y1
+            length = (dx**2 + dy**2)**0.5
+            
+            if length > MIN_LENGTH * 2:
+                # Calculate Midpoint
+                mid_x = (parent.x1 + parent.x2) // 2
+                mid_y = (parent.y1 + parent.y2) // 2
+                
+                # Create Child A (Start -> Mid)
+                child_a = copy.deepcopy(parent)
+                child_a.x2, child_a.y2 = mid_x, mid_y
+                # Fix length/clamping
+                _clamp_stroke_length(child_a)
+                
+                # Create Child B (Mid -> End)
+                child_b = copy.deepcopy(parent)
+                child_b.x1, child_b.y1 = mid_x, mid_y
+                _clamp_stroke_length(child_b)
+                
+                # Replace Parent with Child A, insert Child B right after
+                individual.strokes[idx] = child_a
+                individual.strokes.insert(idx + 1, child_b)
+    
     # --- ACTION 3: ADD STROKE ---
     if action == 'add_stroke':
         if len(individual.strokes) < MAX_MUTATION_STROKES:
@@ -122,34 +155,5 @@ def mutate(individual, mutation_rate):
             idx = random.randint(0, len(individual.strokes) - 1)
             individual.strokes.pop(idx)
     # --- ACTION 5: SPLIT STROKE (Refining) ---
-    if action == 'split_stroke':
-        if len(individual.strokes) < MAX_MUTATION_STROKES and len(individual.strokes) > 0:
-            # Pick a random stroke
-            idx = random.randint(0, len(individual.strokes) - 1)
-            parent = individual.strokes[idx]
-            
-            # Only split if it's long enough
-            dx = parent.x2 - parent.x1
-            dy = parent.y2 - parent.y1
-            length = (dx**2 + dy**2)**0.5
-            
-            if length > MIN_LENGTH * 2:
-                # Calculate Midpoint
-                mid_x = (parent.x1 + parent.x2) // 2
-                mid_y = (parent.y1 + parent.y2) // 2
-                
-                # Create Child A (Start -> Mid)
-                child_a = copy.deepcopy(parent)
-                child_a.x2, child_a.y2 = mid_x, mid_y
-                # Fix length/clamping
-                _clamp_stroke_length(child_a)
-                
-                # Create Child B (Mid -> End)
-                child_b = copy.deepcopy(parent)
-                child_b.x1, child_b.y1 = mid_x, mid_y
-                _clamp_stroke_length(child_b)
-                
-                # Replace Parent with Child A, insert Child B right after
-                individual.strokes[idx] = child_a
-                individual.strokes.insert(idx + 1, child_b)
+    
     return individual

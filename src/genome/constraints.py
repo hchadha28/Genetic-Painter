@@ -5,8 +5,8 @@ CANVAS_HEIGHT = 64
 # Stroke count limits
 # INCREASED: 200 is often too low to resolve fine details. 
 # 400-500 gives the GA enough "budget" to fix tiny errors.
-MIN_STROKES = 10
-MAX_STROKES = 100
+MIN_STROKES = 0
+MAX_STROKES = 20
 MAX_MUTATION_STROKES = 5000
 
 # Stroke Lengths

@@ -19,11 +19,15 @@ def combined_fitness(rendered_img, target_img,decay):
         Combined fitness score (lower = better match)
     """
     # # Weights (simple for now)
-    # w2 = min(max(decay,0.1),0.9)  # weight for SSIM component
-    # w1 = 1 - w2
-    w1 = 0.1
-    w2 = 0.9
+    # w1 = min(max(decay,0.1),0.9)  # weight for SSIM component
+    # w2 = 1 - w1
+    w1 = 0.2
+    w2 = 0.8
     # Compute metrics
+    
+    if decay >= 0.7:
+        w1  = 0.5
+        w2 = 0.5
     
     ssim_val = compute_ssim(rendered_img, target_img)
     delta_e_val = compute_delta_e(rendered_img, target_img)
