@@ -11,7 +11,7 @@ def crossover(parent1, parent2):
     """
 
     # --- STRATEGY 1: SPATIAL CROSSOVER (Structure Preserving) ---
-    if random.random() < 0.5:
+    if random.random() < 0.3:
         # 1. Randomly inherit background color
         bg_color = parent1.bg_color if random.random() < 0.5 else parent2.bg_color
 

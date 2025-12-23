@@ -38,8 +38,8 @@ def mutate(individual, mutation_rate):
     """
     
     # Define the possible moves
-    options = ['modify_stroke', 'modify_bg', 'add_stroke', 'delete_stroke']
-    
+    options = ['modify_stroke', 'modify_bg', 'add_stroke', 'delete_stroke','split_stroke']
+    # options = [ 'modify_bg', 'add_stroke', 'delete_stroke']
     # Pick one action
     action = random.choice(options)
 
@@ -50,10 +50,10 @@ def mutate(individual, mutation_rate):
             stroke = random.choice(individual.strokes)
             
             # Jitter Points
-            stroke.x1 += random.randint(-3, 3)
-            stroke.y1 += random.randint(-3, 3)
-            stroke.x2 += random.randint(-3, 3)
-            stroke.y2 += random.randint(-3, 3)
+            stroke.x1 += random.randint(-1, 1)
+            stroke.y1 += random.randint(-1, 1)
+            stroke.x2 += random.randint(-1, 1)
+            stroke.y2 += random.randint(-1, 1)
             
             # Enforce constraints
             _clamp_stroke_length(stroke)
@@ -61,13 +61,13 @@ def mutate(individual, mutation_rate):
             
             # Jitter Color
             stroke.color = (
-                min(max(stroke.color[0] + random.randint(-10, 10), 0), 255),
-                min(max(stroke.color[1] + random.randint(-10, 10), 0), 255),
-                min(max(stroke.color[2] + random.randint(-10, 10), 0), 255),
+                min(max(stroke.color[0] + random.randint(-5, 5), 0), 255),
+                min(max(stroke.color[1] + random.randint(-5, 5), 0), 255),
+                min(max(stroke.color[2] + random.randint(-5, 5), 0), 255),
             )
             
             # Jitter Alpha
-            stroke.alpha += random.randint(-10, 10)
+            stroke.alpha += random.randint(-5, 5)
             stroke.alpha = min(max(stroke.alpha, ALPHA_MIN), ALPHA_MAX)
         else:
             # Fallback: If no strokes exist, switch to 'add_stroke'
@@ -87,7 +87,7 @@ def mutate(individual, mutation_rate):
         if len(individual.strokes) < MAX_MUTATION_STROKES:
             
             # 80% Chance: Clone & Jitter (Exploitation)
-            if random.random() > 0.2 and len(individual.strokes) > 0:
+            if random.random() > 0.3 and len(individual.strokes) > 0:
                 parent_stroke = random.choice(individual.strokes)
                 new_stroke = copy.deepcopy(parent_stroke)
                 
@@ -121,5 +121,35 @@ def mutate(individual, mutation_rate):
         if len(individual.strokes) > MIN_STROKES:
             idx = random.randint(0, len(individual.strokes) - 1)
             individual.strokes.pop(idx)
-
+    # --- ACTION 5: SPLIT STROKE (Refining) ---
+    if action == 'split_stroke':
+        if len(individual.strokes) < MAX_MUTATION_STROKES and len(individual.strokes) > 0:
+            # Pick a random stroke
+            idx = random.randint(0, len(individual.strokes) - 1)
+            parent = individual.strokes[idx]
+            
+            # Only split if it's long enough
+            dx = parent.x2 - parent.x1
+            dy = parent.y2 - parent.y1
+            length = (dx**2 + dy**2)**0.5
+            
+            if length > MIN_LENGTH * 2:
+                # Calculate Midpoint
+                mid_x = (parent.x1 + parent.x2) // 2
+                mid_y = (parent.y1 + parent.y2) // 2
+                
+                # Create Child A (Start -> Mid)
+                child_a = copy.deepcopy(parent)
+                child_a.x2, child_a.y2 = mid_x, mid_y
+                # Fix length/clamping
+                _clamp_stroke_length(child_a)
+                
+                # Create Child B (Mid -> End)
+                child_b = copy.deepcopy(parent)
+                child_b.x1, child_b.y1 = mid_x, mid_y
+                _clamp_stroke_length(child_b)
+                
+                # Replace Parent with Child A, insert Child B right after
+                individual.strokes[idx] = child_a
+                individual.strokes.insert(idx + 1, child_b)
     return individual

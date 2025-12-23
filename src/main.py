@@ -38,9 +38,10 @@ def main():
             renderer.render(individual)
             for individual in population
         ]
+        decay = gen/generations
         # compute fitness for each rendered image
         fitness_values = [
-            combined_fitness(img, target)
+            combined_fitness(img, target,decay)
             for img in rendered_images
             
         ]
