@@ -40,7 +40,7 @@ Here are the results of the algorithm starting from an empty canvas. Notice how 
 
 1.  **Clone the repository**
     ```bash
-    git clone [https://github.com/yourusername/genetic-painter.git](https://github.com/yourusername/genetic-painter.git)
+    git clone https://github.com/hchadha28/Genetic-Painter.git
     cd genetic-painter
     ```
 
@@ -58,6 +58,7 @@ Run the main evolution script:
 
 ```bash
 python main.py
+
 
 
 
