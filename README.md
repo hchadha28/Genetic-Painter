@@ -2,8 +2,6 @@
 
 > **An Evolutionary Algorithm that learns to paint like a human, stroke by stroke.**
 
-![Banner Image Placeholder](https://via.placeholder.com/800x200?text=Genetic+Painter:+Evolution+in+Action)
-*(Replace this banner with a cool collage of your best results)*
 
 ## 📖 Overview
 
@@ -65,3 +63,4 @@ Run the main evolution script:
 
 ```bash
 python main.py
+
