@@ -57,7 +57,10 @@ Here are the results of the algorithm starting from an empty canvas. Notice how 
 Run the main evolution script:
 
 ```bash
-python main.py
+python -m src.main
+```
+
+
 
 
 
