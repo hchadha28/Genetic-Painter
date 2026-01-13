@@ -35,11 +35,6 @@ Here are the results of the algorithm starting from an empty canvas. Notice how 
 * **Stroke Splitting (Mitosis):** A long stroke can split into two connected segments, allowing the AI to refine local details (like an elbow or corner) without destroying the overall shape.
 * **Hybrid Crossover:** Randomly chooses between **Spatial Crossover** (stitching left/right halves of parents) and **Blending Crossover** (mixing stroke layers).
 
-### ⚡ Optimization
-* **Lazy Evaluation:** Caches fitness scores to avoid re-rendering unchanged elites (20% speedup).
-* **Multiprocessing:** Parallelized fitness evaluation to utilize all CPU cores.
-* **Simulated Annealing:** Mutation magnitude decays over time (High exploration → High precision).
-* **Memory Efficient:** Uses `__slots__` for stroke objects to minimize RAM usage.
 
 ## 🛠️ Installation
 
@@ -63,5 +58,6 @@ Run the main evolution script:
 
 ```bash
 python main.py
+
 
 
