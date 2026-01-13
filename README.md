@@ -17,8 +17,8 @@ Here are the results of the algorithm starting from an empty canvas. Notice how 
 
 | Experiment | Target Image | Generated Art |
 | :---: | :---: | :---: |
-| **1. Mona Lisa** | ![Target](data\target\target64.jpg) | ![Output](data\outputs\mona_llisa_best.png) |
-| **2. Roco** | ![Target](data\target\roco.png) | ![Output](data\outputs\roco_best.png) |
+| **1. Mona Lisa** | ![Target](data/target/target64.jpg) | ![Output](data/outputs/mona_llisa_best.png) |
+| **2. Roco** | ![Target](data/target/roco.png) | ![Output](data/outputs/roco_best.png) |
 
 *(Note: Images are 64x64 resolution, upscaled for visibility)*
 
@@ -63,4 +63,5 @@ Run the main evolution script:
 
 ```bash
 python main.py
+
 
